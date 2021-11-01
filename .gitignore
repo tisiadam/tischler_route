@@ -1,1 +1,4 @@
 **.DS_Store
+docker/mysql/var/lib/mysql/*
+.idea
+README.pdf
