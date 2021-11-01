@@ -99,6 +99,8 @@ A könnyebb kezelhetőség kedvéért a `fish` hozzá lett adva a `Dockerfile`-b
 docker-compose exec php fish
 ```
 
+\pagebreak
+
 Amenyiben a php konténerben vagyunk egyszerűen futtathatjuk a szükséges parancsokat.
 
 ```bash
@@ -121,7 +123,7 @@ php artisan config:cache
 
 **Valamelyik fájl nem írható**
 
-https://stackoverflow.com/questions/50552970/laravel-docker-the-stream-or-file-var-www-html-storage-logs-laravel-log-co
+
 
 Amennyiben jogosultság probléma állna fenn az alaáábi értékeket kellene helyesen megadni a `.env` fájlban.
 
@@ -130,11 +132,25 @@ UID=1000
 GID=1000
 ```
 
+**UID értéke:** `id -u`
+
+**GID értéke:** `id -g`
+
+
+ >  The ability to automatically process UID and GID vars will not be added to compose. Reasoning is solidly explained on github (https://github.com/compose-spec/compose-spec/issues/94) as a potential security hole in a declarative language.
+
+- https://stackoverflow.com/questions/50552970/laravel-docker-the-stream-or-file-var-www-html-storage-logs-laravel-log-co
+- https://stackoverflow.com/questions/56844746/how-to-set-uid-and-gid-in-docker-compose
+- https://dev.to/acro5piano/specifying-user-and-group-in-docker-i2e
+
+
 **Hogyan helyes? "`composer`" vagy "`php composer`"?**
 
 A konténerben a composer úgy van bekonfigurálva, hogy tudja sajátmagáról, hogy ő egy PHP script. Továbbá a `PATH`-ben szerepel a `php` elérési útvonala.
 
 Ezeknek köszönhetően elhagyható a `php` a szkript futtatása előtt. Máshol szükséges kirakni!
+
+\pagebreak
 
 **Hogyan helyes? "`artisan`",  "`php artisan`" vagy "`./artisan`"?**
 
