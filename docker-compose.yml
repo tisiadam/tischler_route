@@ -6,7 +6,6 @@ networks:
 services:
   web:
     image: nginx:stable-alpine
-    # env_file: "./www/.env"
     ports:
       - "${PORT_WEB}:80"
     volumes:
@@ -22,6 +21,7 @@ services:
     build:
       context: ./docker/php
       dockerfile: Dockerfile
+    user: "${UID:-1000}:${GID:-1000}"
     volumes:
       - ./www:/var/www/html:rw
     networks:
@@ -29,9 +29,6 @@ services:
 
   db:
     image: ubuntu/mysql:8.0-20.04_beta
-    # env_file:
-    #     - "./www/.env"
-    #command: --default-authentication-plugin=mysql_native_password
     environment:
         - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
         - MYSQL_USER=${DB_USERNAME}
