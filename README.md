@@ -2,7 +2,7 @@
 
 ## Szerver előkészítése
 
-A `https://github.com/rcsnjszg/laravel-alap.git` egy olyan alap projektet tartalmaz, amiben már benne tartalmaz egy teljes webszervert, továbbá a `www` mappában a `https://github.com/laravel/laravel` oldalon található laravel egy változatát.
+A `https://github.com/rcsnjszg/laravel-alap.git` egy olyan alap projektet tartalmaz, amiben már benne tartalmaz egy teljes webszervert, továbbá `https://github.com/laravel/laravel` oldalon található laravel egy változatát.
 
 A tároló klónozásával hozzunk létre egy új projektet.
 A `projekt_neve` helyére illesszük be, hogy melyik mappában szeretnénl ezt megtenni.
@@ -91,6 +91,9 @@ docker-compose exec php php artisan key:generate
 Itt az első `php` az a konténer neve, míg a második `php` magát a php-cli-t takarja.
 
 A `--show` paraméter hozzáadásával nem csak legenerálja a kucsot, hanem megmutatja számunkra.
+
+Előfordulhat, hogy nem működik a parancs, ilyenkor a böngészőben megnyitva
+a gombra kattintva generálhatjuk le. Ez után az oldal frissítése szükséges.
 
 ```bash
 docker-compose exec php php artisan key:generate --show
