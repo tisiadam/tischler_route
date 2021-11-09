@@ -251,3 +251,31 @@ futtatás:
 ```bash
 install.sh projekt_neve
 ```
+
+## Feltöltés saját GIT repoba
+A `git remote -v` parancs segítségével nézhetjük meg, hogy jelenleg mi a beállított távoli repo.
+
+```bash
+git remote -v
+```
+
+```text
+origin  git@github.com:rcsnjszg/laravel-alap.git (fetch)
+origin  git@github.com:rcsnjszg/laravel-alap.git (push)
+```
+
+Láthatjuk, hogy az a repo van beállítva, amit leklónoztunk.
+Ugyan publikus, de a `push` művelethez nincs akárkinek jogosultsága.
+
+Létre kell hozni egy saját repo-t. Ezt beállítani, és ide pusholni, illetve későbbiekben innen pullolni.
+
+A `git remote add` nem használható, mert már hozzá lett adva (klónozáskor).
+Kiadásakor *error: remote origin already exists.* hibaüzenetet kapunk.
+
+A `git remote set-url` segítségével cserélhetjük le az URL-t.
+
+Például
+
+```bash
+git remote set-url origin git@github.com:rcsnjszg/laravel-test-sajat.git
+```
