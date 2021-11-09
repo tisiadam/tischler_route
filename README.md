@@ -13,20 +13,48 @@ git clone https://github.com/rcsnjszg/laravel-alap.git projekt_neve
 
 Amennyiben nem lenne git a gépünkön telepítve, az előbbi műveletet docker segítségével is megtehetjük:
 
+**Windows - CMD:**
+
+```bat
+docker run -it --rm -v %cd%:/git alpine/git clone \
+    https://github.com/rcsnjszg/laravel-alap.git projekt_neve
+```
+
+**Windows - Power Shell**
+
+```powershell
+docker run -it --rm -v ${PWD}:/git alpine/git clone \
+    https://github.com/rcsnjszg/laravel-alap.git projekt_neve
+```
+**Mac és Linux - bash, zsh**
+
 ```bash
-docker run -it --rm -v $(pwd):/git alpine/git clone \
+docker run -it --rm -v (pwd):/git alpine/git clone \
     https://github.com/rcsnjszg/laravel-alap.git projekt_neve
 ```
 
 Ahogy a Laravel projekt esetén, így itt is szükségünk lesz egy `.env` fájlra,
 amit a `.env.example` másolásával hozhatjuk létre a legegyszerűbben.
-Ezt a projektünk `www` mappájában tegyük meg, hiszen itt található a laravel kódja,
-így itt is keresi.
+Ezt a gyökérkönyvtárban tegyük meg, hiszen ott található a `.env.example` fájl.
+
+**Windows - CMD:**
+
+```bat
+copy .env.example .env
+```
+
+**Windows - Power Shell**
+
+```powershell
+Copy-Item .env.example .env
+```
+**Mac és Linux - bash, zsh**
 
 ```bash
-cd projekt_neve/www
 cp .env.example .env
 ```
+
+\pagebreak
 
 Mivel a php nem egy kész image lesz, hanem mi magunk építjük fel, továbbá kiegészítéseket is telepítünk hozzá,
 így a `docker/php/Dockerfile` "recept" alapján kell felépíteni:
@@ -42,8 +70,6 @@ Innentől a `docker-compose up` paranccsal indíthatjuk a szerverünket. A `-d` 
 ```bash
 docker-compose up -d
 ```
-
-\pagebreak
 
 ## Laravel projekt indítása konténeren kívülről
 
@@ -62,7 +88,9 @@ az `artisan` megfelelő paraméterezésével `key:generate` hozhatjuk létre.
 docker-compose exec php php artisan key:generate
 ```
 
-A `--show` segítségével megjeleníthetjük rögtön a generált kulcsot.
+Itt az első `php` az a konténer neve, míg a második `php` magát a php-cli-t takarja.
+
+A `--show` paraméter hozzáadásával nem csak legenerálja a kucsot, hanem megmutatja számunkra.
 
 ```bash
 docker-compose exec php php artisan key:generate --show
@@ -83,23 +111,20 @@ Amennyiben a `php` konténeren belül adunk ki parancsokat,
 Ehhez elsőként csatlakozzunk a a konténerhez.
 Mivel a `docker-compose` segítségével indítottuk, így most ia azt használhatjuk.
 
-Figyelem! A `www` mappából futtassuk.
-
 A `docker-compose exec kontener_neve futtatandó_program paraméterek` sablon alapján tudunk nekiindulni.
 
 Mivel egy shell-t szeretnénk kapni, így egy létező nevét adhatjuk meg.
 Elsőként lehet a `/bin/bash` jut eszünkbe, de azt alapból az alpine php nem tartalmazza és nem is telepítettük.
-Egy másik lehetőség, amit alapból tartalmaz az a `/bin/sh`, bár akad közöttük különbség.
+Egy másik lehetőség, amit alapból tartalmaz az a `/bin/sh`. A két shell között akad némi különbség.
 
 Egy kis összehasonlítás: https://www.baeldung.com/linux/sh-vs-bash.
 
-A könnyebb kezelhetőség kedvéért a `fish` hozzá lett adva a `Dockerfile`-ban, így érdemes ezt választani.
+A könnyebb kezelhetőség kedvéért a `fish` (friendly interactive shell)
+hozzá lett adva a `Dockerfile`-ban, így érdemes ezt választani.
 
 ```bash
 docker-compose exec php fish
 ```
-
-\pagebreak
 
 Amenyiben a php konténerben vagyunk egyszerűen futtathatjuk a szükséges parancsokat.
 
@@ -120,6 +145,8 @@ php artisan config:cache
 ```
 
  - https://stackoverflow.com/questions/53236518/difference-between-php-artisan-configcache-and-php-artisan-cacheclear-in-l
+
+\pagebreak
 
 **Valamelyik fájl nem írható**
 
@@ -150,10 +177,69 @@ A konténerben a composer úgy van bekonfigurálva, hogy tudja sajátmagáról, 
 
 Ezeknek köszönhetően elhagyható a `php` a szkript futtatása előtt. Máshol szükséges kirakni!
 
-\pagebreak
-
 **Hogyan helyes? "`artisan`",  "`php artisan`" vagy "`./artisan`"?**
 
 A composer-hez hasonlóan az artisan is php-ban megírt konzolos script lesz.
 
 Meghívható a `php` közvetlen megadásával, de ez akár el is hahyható. ugyanakkor a composerrel ellentétben, mivel nem globálisan telepített szkript, így az `artisan` nem, de a `./artisan` működőképes.
+
+\pagebreak
+
+## Automaizált futtatás
+
+Amennyiben nem szeretnénk soronként futtatni létrehozhatunk olyan szkriptet, ami ezt automatizálja.
+
+**Windows - CMD:**
+Az `install.bat` fájl tartalma:
+
+```bat
+git clone https://github.com/rcsnjszg/laravel-alap.git %1
+cd %1
+copy .env.example .env
+docker-compose build
+docker-compose up -d
+docker-compose exec php composer install
+docker-compose exec php php artisan key:generate --show
+```
+
+futtatás:
+```bash
+install.bat projekt_neve
+```
+
+**Windows - Power Shell**
+Az `install.ps` fájl tartalma:
+
+```powershell
+git clone https://github.com/rcsnjszg/laravel-alap.git $Args[0]
+cd $Args[0]
+Copy-Item .env.example .env
+docker-compose build
+docker-compose up -d
+docker-compose exec php composer install
+docker-compose exec php php artisan key:generate --show
+```
+
+futtatás:
+```powershell
+install.ps projekt_neve
+```
+
+**Mac és Linux - bash, zsh**
+
+Az `install.sh` fájl tartalma:
+
+```bash
+git clone https://github.com/rcsnjszg/laravel-alap.git $1
+cd "$1"
+cp .env.example .env
+docker-compose build
+docker-compose up -d
+docker-compose exec php composer install
+docker-compose exec php php artisan key:generate --show
+```
+
+futtatás:
+```bash
+install.sh projekt_neve
+```
