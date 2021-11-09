@@ -13,7 +13,11 @@ RUN apk update && apk add --no-cache \
     curl \
     oniguruma-dev \
     libxml2-dev \
+    vim \
+    mysql-client \
     fish
+    
+
 
 RUN docker-php-ext-install pdo_mysql zip exif pcntl
 RUN docker-php-ext-install gd
