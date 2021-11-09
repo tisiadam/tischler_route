@@ -93,7 +93,8 @@ Itt az első `php` az a konténer neve, míg a második `php` magát a php-cli-t
 A `--show` paraméter hozzáadásával nem csak legenerálja a kucsot, hanem megmutatja számunkra.
 
 Előfordulhat, hogy nem működik a parancs, ilyenkor a böngészőben megnyitva
-a gombra kattintva generálhatjuk le. Ez után az oldal frissítése szükséges.
+a "Generate app key" gombra kattintva generálhatjuk le. Ez után az oldal frissítése szükséges, 
+ezt a "Refresh now" linkre kattintva is megtehetjük.
 
 ```bash
 docker-compose exec php php artisan key:generate --show
@@ -186,6 +187,10 @@ A composer-hez hasonlóan az artisan is php-ban megírt konzolos script lesz.
 
 Meghívható a `php` közvetlen megadásával, de ez akár el is hahyható. ugyanakkor a composerrel ellentétben, mivel nem globálisan telepített szkript, így az `artisan` nem, de a `./artisan` működőképes.
 
+**A buildelés megszakadt, hibaüzenetet adott**
+
+Amennyiben a `docker-compose build` leállna érdemes újra futtatni, és reménykedni.
+
 \pagebreak
 
 ## Automaizált futtatás
@@ -233,7 +238,7 @@ install.ps projekt_neve
 Az `install.sh` fájl tartalma:
 
 ```bash
-git clone https://github.com/rcsnjszg/laravel-alap.git $1
+git clone https://github.com/rcsnjszg/laravel-alap.git "$1"
 cd "$1"
 cp .env.example .env
 docker-compose build
