@@ -16,7 +16,7 @@ Amennyiben nem lenne git a gépünkön telepítve, az előbbi műveletet docker 
 **Windows - CMD:**
 
 ```bat
-docker run -it --rm -v %cd%:/git alpine/git clone \
+docker run -it --rm -v %cd%:/git alpine/git clone ^
     https://github.com/rcsnjszg/laravel-alap.git projekt_neve
 ```
 
